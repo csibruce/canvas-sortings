@@ -66,9 +66,8 @@ class BubbleSort {
         let b = this.array[this.current + 1]
 
         this.comparisonCount = this.comparisonCount + 1
-        if (a > b) {
-            this.array[this.current] = b
-            this.array[this.current + 1] = a
+        if (a > b) {        
+            [this.array[this.current], this.array[this.current + 1]] = [this.array[this.current + 1], this.array[this.current]]
             this.canvas.drawArray(this.array, [this.current,this.current + 1])
             this.swapCount = this.swapCount + 1
         } else {
