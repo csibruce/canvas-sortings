@@ -1,0 +1,11 @@
+{
+  "name": "sortings",
+  "version": "1.0.0",
+  "description": "sorting-visualization",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "csi.bruce@gmail.com",
+  "license": "ISC"
+}
