@@ -1,4 +1,4 @@
-const ARRAY_SIZE = 100
+const ARRAY_SIZE = 50
 
 const canvasElement = document.querySelector('#canvas')
 
@@ -20,7 +20,7 @@ class Canvas {
         ctx.clearRect(0, 0, canvas.width, canvas.height)
     }
 
-    drawArray(array, targets = []) {
+    drawArray(array, targets = [], color = 'lightGreen') {
         const { BAR_WIDTH, HEIGHT_RATIO } = this
         const ctx = this.ctx
         ctx.fillStyle = 'black';
@@ -28,7 +28,7 @@ class Canvas {
         ctx.fillText('bubble sort', 0, 250)
         array.forEach((num, idx) => {
             const x = idx * BAR_WIDTH
-            ctx.fillStyle = (targets.indexOf(idx) > -1) ? 'lightGreen' : 'gray'
+            ctx.fillStyle = (targets.indexOf(idx) > -1) ? color : 'gray'
             ctx.fillRect(x, 0, BAR_WIDTH, (num + 1) * HEIGHT_RATIO)
         });
     }
@@ -98,7 +98,63 @@ class BubbleSort {
     }
 }
 
-const bubble = new BubbleSort(shuffledArray, canvas)
+class SelectionSort {
+    constructor(array, canvas) {
+        this.array = [...array]
+        this.canvas = canvas
+        this.step = 0
+        this.current = 1
+        this.sortedIndex = -1
+        this.lowestNumberIndex = 0
+        this.comparisonCount = 0
+        this.swapCount = 0
+    }
+
+    next (step = 0) {
+        this.canvas.clear()
+        this.step = step        
+        const lowestNumber = this.array[this.lowestNumberIndex]
+        const targetIndex = this.sortedIndex + this.current
+        let target = this.array[targetIndex]
+
+        if (lowestNumber > target) {
+            this.lowestNumberIndex = targetIndex
+        }
+        this.comparisonCount = this.comparisonCount + 1
+
+        // reach the end of array
+        if (target === undefined) {
+            [this.array[this.sortedIndex + 1], this.array[this.lowestNumberIndex]] = [this.array[this.lowestNumberIndex], this.array[this.sortedIndex + 1]]
+            this.sortedIndex = this.sortedIndex + 1
+            this.lowestNumberIndex = this.sortedIndex + 1
+            this.current = 1
+            this.swapCount = this.swapCount + 1
+            this.canvas.drawArray(this.array, [this.lowestNumberIndex, this.sortedIndex + 1], 'red')
+        } else {
+            this.canvas.drawArray(this.array, [targetIndex])
+        }
+        
+        this.current = this.current + 1        
+
+        if (this.sortedIndex > array.length) {
+            console.log({
+                type: 'selection',
+                arraySize: this.array.length,
+                step: this.step + 1,
+                comparisonCount: this.comparisonCount,
+                swapCount: this.swapCount
+            })
+            return
+        }
+        
+        setTimeout(() => {
+            this.next(this.step + 1)
+        }, 1)
+    }
+}
+
+// const bubble = new BubbleSort(shuffledArray, canvas)
+const bubble = new SelectionSort(shuffledArray, canvas)
 
 bubble.next()
 
